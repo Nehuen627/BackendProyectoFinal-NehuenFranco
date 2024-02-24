@@ -9,6 +9,7 @@ import UserDTO from '../dao/DTOs/user.DTO.js';
 import {createError} from '../utils/createError.js';
 import errorList from '../utils/errorList.js';
 import { generatorUserLoginError } from '../utils/errorCause.js';
+import cartsController from '../controller/carts.controller.js';
 const optsUser = {
     usernameField: 'email',
     passReqToCallback: true,
@@ -102,7 +103,6 @@ export const init = () => {
                 if (userWithGithubId) {
                     return done(null, userWithGithubId);
                 }
-    
                 const data = {
                     firstName: profile._json.name,
                     lastName: '',
@@ -111,7 +111,7 @@ export const init = () => {
                     password: '',
                     provider: 'Github',
                     githubId: githubId, 
-                    cart: '',
+                    cart: "",
                     document: '',
                     lastConnection: ""
                 };
@@ -124,6 +124,7 @@ export const init = () => {
             if (user) {
                 return done(null, user);
             }
+            const userCart = await cartsController.addCart(email)
             const data = {
                 firstName: profile._json.name,
                 lastName: '',
@@ -132,7 +133,8 @@ export const init = () => {
                 password: '',
                 provider: 'Github',
                 document: '',
-                lastConnection: ""
+                lastConnection: "",
+                cart: userCart
             };
     
             const newUser = await usersController.addGithubUser(data);

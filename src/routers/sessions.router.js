@@ -38,7 +38,7 @@ router.get('/sessions/current', passport.authenticate('current', { failureRedire
     res.json({ user: currentUser });
 });
 
-router.post('/sessions/login-github', passport.authenticate('current', { session: false }), async (req, res) => {
+router.post('/sessions/login-github', async (req, res) => {
     try {
         const { body:{ email } } = req;
         let user = req.user
